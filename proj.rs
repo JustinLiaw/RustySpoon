@@ -1,3 +1,6 @@
+//use std::rand;
+use rand::Rng;
+
 trait Lyrics {
     fn bottles(&self, bool) -> Self;
     fn take(&self) -> Self;
@@ -9,22 +12,23 @@ trait Lyrics {
 impl Lyrics for u32 {
     fn bottles(&self, cap:bool) -> u32 {
         match *self {
-            0 => print!("{}o more bottles of beer", if cap {"N"} else {"n"}),
-            1 => print!("{} bottle of beer", self),
-            _ => print!("{} bottles of beer", self)
+            0 => print!("{}o more lines of text", if cap {"N"} else {"n"}),
+            1 => print!("{} line of text", self),
+            _ => print!("{} lines of text", self)
         }
         *self
     }
 
     fn take(&self) -> u32 {
         match *self {
-            0 => { print!("Go to the store and buy some more, "); 99 }
-            _ => { print!("Take one down and pass it around, "); *self - 1 }
+            // '_' means else
+            _ => { print!("Print it out, stand up and shout, "); *self + 1 }
+            //_ => { print!("Go to the lab and type some more, "); *self + 1 }
         }
     }
 
     fn wall(&self) -> u32 {
-        print!(" on the wall");
+        print!(" on the screen");
         *self
     }
 
@@ -39,9 +43,17 @@ impl Lyrics for u32 {
 }
 
 fn main() {
-    for i in (0..100).rev() {
+    //part a and b: Counts upwards to 100 inc 1. Lyrics changed. 
+    // for i in 1..100 {
+    //     i.bottles(true).wall().mid().bottles(false).end();
+    //     i.take().bottles(false).wall().end();
+    //     println!();
+    // }
+
+    for i in 1..500 {
         i.bottles(true).wall().mid().bottles(false).end();
         i.take().bottles(false).wall().end();
         println!();
+        i = i + 1;
     }
 }

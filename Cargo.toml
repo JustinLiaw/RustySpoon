@@ -1,0 +1,9 @@
+[package]
+name = "proj"
+
+[[bin]]
+name = "proj1"
+path = "src/proj1.rs"
+
+[dependencies]
+rand = "0.8.5"
