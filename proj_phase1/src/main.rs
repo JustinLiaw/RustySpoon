@@ -1,5 +1,6 @@
 use rand::Rng;
 use std::io;
+use std::{thread, time};
 
 trait Lyrics {
     fn bottles(&self, bool: bool) -> Self;
@@ -73,5 +74,18 @@ fn main() {
     // }
 
     //Part F: Wait 1 second between each
-    
+    let mut _input = String::new();
+    println!("How many lines?");
+    let _ = io::stdin().read_line(&mut _input);
+    let num: u32 = _input.trim().parse().expect("Bad");
+
+    for i in 1..num {
+        i.bottles(true).wall().mid().bottles(false).end();
+        i.take().bottles(false).wall().end();
+        println!();
+
+        //Time and Sleep
+        let one_sec = time::Duration::from_secs(1);
+        thread::sleep(one_sec);
+    }
 }
