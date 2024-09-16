@@ -71,4 +71,7 @@ fn main() {
     //     i.take().bottles(false).wall().end();
     //     println!();
     // }
+
+    //Part F: Wait 1 second between each
+    
 }
