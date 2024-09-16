@@ -1,4 +1,5 @@
 use rand::Rng;
+use std::io;
 
 trait Lyrics {
     fn bottles(&self, bool: bool) -> Self;
@@ -42,7 +43,7 @@ impl Lyrics for u32 {
 }
 
 fn main() {
-    //part a and b: Counts upwards to 100 inc 1. Lyrics changed. 
+    //part A and B: Counts upwards to 100 inc 1. Lyrics changed. 
     // for i in 1..100 {
     //     i.bottles(true).wall().mid().bottles(false).end();
     //     i.take().bottles(false).wall().end();
@@ -50,12 +51,24 @@ fn main() {
     // }
 
     //Part C: count up to 500 but increment by a random number
-    let mut rng = rand::thread_rng();
-    let r_num: usize = rng.gen_range(1..=10);
+    // let mut rng = rand::thread_rng();
+    // let r_num: usize = rng.gen_range(1..=10);
 
-    for i in (1..500).step_by(r_num) {
-        i.bottles(true).wall().mid().bottles(false).end();
-        i.take().bottles(false).wall().end();
-        println!();
-    }
+    // for i in (1..500).step_by(r_num) {
+    //     i.bottles(true).wall().mid().bottles(false).end();
+    //     i.take().bottles(false).wall().end();
+    //     println!();
+    // }
+
+    //Part D: Display a prompt like "How many lines? " and read an integer from the terminal. Stop at that number
+    // let mut _input = String::new();
+    // println!("How many lines?");
+    // let _ = io::stdin().read_line(&mut _input);
+    // let num: u32 = _input.trim().parse().expect("Bad");
+
+    // for i in 1..num {
+    //     i.bottles(true).wall().mid().bottles(false).end();
+    //     i.take().bottles(false).wall().end();
+    //     println!();
+    // }
 }
