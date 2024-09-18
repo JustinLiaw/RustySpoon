@@ -1,5 +1,6 @@
 use rand::Rng;
 use std::io;
+use prime_factorization::Factorization;
 use std::{thread, time};
 
 trait Lyrics {
@@ -8,14 +9,50 @@ trait Lyrics {
     fn wall(&self) -> Self;
     fn mid(&self) -> Self;
     fn end(&self);
+    fn long_num(&self ,num:u32) -> String;
 }
 
 impl Lyrics for u32 {
+    // Part G: Breaks all the printed text into prime factorization
+
+    fn long_num(&self, num: u32) -> String {
+        //Runs the factor repr
+        let factor_repr = Factorization::run(num);
+        if num == 1 {
+            return "()".to_string();
+        }
+        if factor_repr.is_prime {
+            return "()".to_string();
+        }
+        // println!("{} <- The factorization of the number of bottles", factor_repr);
+        // assert_eq!(factor_repr.factors, vec![2, 3, 5]);
+        // *self
+        // *self
+        let mut out : String = "(".to_string();
+        for i in 0..factor_repr.factors.len() {
+            if i == factor_repr.factors.len() - 1   {
+
+                out += &(factor_repr.factors[i].to_string() + &(")"));
+            }
+            else {
+                let temp :String = "*".to_string();
+                out += &(factor_repr.factors[i].to_string() + &temp);
+            } 
+        }
+        // println!("{}" ,factor_repr.factors[0]);
+        //  return factor_repr;
+        // return factor_repr.factors.pop()
+        
+        
+
+        return out;
+    } 
+
     fn bottles(&self, cap:bool) -> u32 {
         match *self {
             0 => print!("{}o more lines of text", if cap {"N"} else {"n"}),
-            1 => print!("{} line of text", self),
-            _ => print!("{} lines of text", self)
+            1 => print!("{} line of text", self.long_num(*self)),
+            _ => print!("{} lines of text", self.long_num(*self))
         }
         *self
     }
