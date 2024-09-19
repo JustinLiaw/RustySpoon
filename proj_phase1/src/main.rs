@@ -2,17 +2,30 @@ use rand::Rng;
 use std::io;
 use prime_factorization::Factorization;
 use std::{thread, time};
+use std::fs::File;
+use std::path::Path;
+use std::io::prelude::*;
+
+// for parts A-G
 
 trait Lyrics {
     fn bottles(&self, bool: bool) -> Self;
+    fn bottles_fact(&self, bool: bool) -> Self;
+    fn bottlesFile(&self, bool: bool, File: &mut File) -> Self;
+    fn takeFile(&self,File: &mut File) -> Self;
     fn take(&self) -> Self;
+    fn wallFile(&self,File:&mut File) -> Self;
     fn wall(&self) -> Self;
+    fn midFile(&self,File:&mut File) -> Self;
     fn mid(&self) -> Self;
     fn end(&self);
-    fn long_num(&self ,num:u32) -> String;
+    fn endFile(&self, File:&mut File);
+    // fn long_num(&self ,num:u32, File: File) -> String;
+    fn long_num(&self, num:u32) -> String;
 }
 
 impl Lyrics for u32 {
+    
     // Part G: Breaks all the printed text into prime factorization
 
     fn long_num(&self, num: u32) -> String {
@@ -51,6 +64,15 @@ impl Lyrics for u32 {
     fn bottles(&self, cap:bool) -> u32 {
         match *self {
             0 => print!("{}o more lines of text", if cap {"N"} else {"n"}),
+            1 => print!("{} line of text", *self),
+            _ => print!("{} lines of text", *self)
+        }
+        *self
+    }
+
+    fn bottles_fact(&self, cap:bool) -> u32 {
+        match *self {
+            0 => print!("{}o more lines of text", if cap {"N"} else {"n"}),
             1 => print!("{} line of text", self.long_num(*self)),
             _ => print!("{} lines of text", self.long_num(*self))
         }
@@ -78,7 +100,41 @@ impl Lyrics for u32 {
     fn end(&self) {
         println!(".");
     }
+
+    fn bottlesFile(&self, cap: bool, file:&mut File) -> Self {
+        let first_letter = if cap {"N"} else {"n"}.to_string();
+        match *self {
+            0 => file.write_all((first_letter + "o more lines of text").as_bytes()),
+            1 => file.write_all(((self.long_num(*self)).to_string() + " line of text").as_bytes()),
+            _ => file.write_all(((self.long_num(*self)).to_string() + " lines of text").as_bytes()),
+        };
+        *self
+    }
+
+    fn takeFile(&self, file:&mut File) -> u32 {
+        match *self {
+            // '_' means else
+            _ => { file.write_all("Print it out, stand up and shout, ".as_bytes()); *self + 1 }
+            //_ => { print!("Go to the lab and type some more, "); *self + 1 }
+        }
+    }
+
+    fn wallFile(&self, file:&mut File) -> u32 {
+        file.write_all(" on the screen".as_bytes());
+        *self
+    }
+
+    fn midFile(&self, file:&mut File) -> u32 {
+        file.write_all(", ".as_bytes());
+        *self
+    }
+
+    fn endFile(&self, file:&mut File) {
+       file.write_all(".\n".as_bytes()); 
+    }
+
 }
+
 
 fn main() {
     //part A and B: Counts upwards to 100 inc 1. Lyrics changed. 
@@ -111,18 +167,89 @@ fn main() {
     // }
 
     //Part F: Wait 1 second between each
+    // let mut _input = String::new();
+    // println!("How many lines?");
+    // let _ = io::stdin().read_line(&mut _input);
+    // let num: u32 = _input.trim().parse().expect("Bad");
+
+    // for i in 1..num {
+    //     i.bottles(true).wall().mid().bottles(false).end();
+    //     i.take().bottles(false).wall().end();
+    //     println!();
+
+    //     //Time and Sleep
+    //     let one_sec = time::Duration::from_secs(1);
+    //     thread::sleep(one_sec);
+    // }
+
+    //Part G: Factors
+    // let mut _input = String::new();
+    // println!("How many lines?");
+    // let _ = io::stdin().read_line(&mut _input);
+    // let num: u32 = _input.trim().parse().expect("Bad");
+
+    // for i in 1..num {
+    //     i.bottles_fact(true).wall().mid().bottles_fact(false).end();
+    //     i.take().bottles_fact(false).wall().end();
+    //     println!();
+
+    //     //Time and Sleep
+    //     let one_sec = time::Duration::from_secs(1);
+    //     thread::sleep(one_sec);
+    // }
+
+    // // Part H: Writing to file
+    // let mut _input = String::new();
+    // println!("How many lines?");
+    // let _ = io::stdin().read_line(&mut _input);
+    // let num: u32 = _input.trim().parse().expect("Bad");
+    // let path = Path::new("out.txt");
+
+    // let mut file = match File::create(&path) {
+    //     Err(why) => panic!("couldn't create"),
+    //     Ok(file) => file,
+    // };
+
+    // for i in 1..num {
+    //     i.bottlesFile(true,&mut file).wallFile(&mut file).midFile(&mut file).bottlesFile(false,&mut file).endFile(&mut file);
+    //     i.takeFile(&mut file).bottlesFile(false,&mut file).wallFile(&mut file).endFile(&mut file);
+    //     file.write_all(b"\n");
+    // }
+
+    // for i in 1..num {
+    //     i.bottles(true).wall().mid().bottles(false).end();
+    //     i.take().bottles(false).wall().end();
+    //     println!();
+    // }
+
+     // Part I: Writing to file
     let mut _input = String::new();
     println!("How many lines?");
     let _ = io::stdin().read_line(&mut _input);
     let num: u32 = _input.trim().parse().expect("Bad");
+    let path = Path::new("out.txt");
+
+    let mut file = match File::create(&path) {
+        Err(why) => panic!("couldn't create"),
+        Ok(file) => file,
+    };
+
+    let handle = thread::spawn(move ||{
+        for i in 1..num {
+            i.bottlesFile(true,&mut file).wallFile(&mut file).midFile(&mut file).bottlesFile(false,&mut file).endFile(&mut file);
+            i.takeFile(&mut file).bottlesFile(false,&mut file).wallFile(&mut file).endFile(&mut file);
+            file.write_all(b"\n");
+        }
+        
+        std::io::stderr().write(b"Haha I'm a thread!\n");
+    });
 
     for i in 1..num {
         i.bottles(true).wall().mid().bottles(false).end();
         i.take().bottles(false).wall().end();
         println!();
-
-        //Time and Sleep
-        let one_sec = time::Duration::from_secs(1);
-        thread::sleep(one_sec);
     }
+    std::io::stderr().write(b"It's me the main!\n").unwrap();
+
+    handle.join().unwrap();
 }
