@@ -5,6 +5,7 @@ use std::{thread, time};
 use std::fs::File;
 use std::path::Path;
 use std::io::prelude::*;
+use std::time::Duration;
 
 // for parts A-G
 
@@ -239,15 +240,17 @@ fn main() {
             i.bottles_file(true,&mut file).wall_file(&mut file).mid_file(&mut file).bottles_file(false,&mut file).end_file(&mut file);
             i.take_file(&mut file).bottles_file(false,&mut file).wall_file(&mut file).end_file(&mut file);
             file.write_all(b"\n");
+            thread::sleep(Duration::from_millis(1));
         }
         
         std::io::stderr().write(b"Haha I'm a thread!\n");
     });
 
     for i in 1..num {
-        i.bottles(true).wall().mid().bottles(false).end();
-        i.take().bottles(false).wall().end();
+        i.bottles_fact(true).wall().mid().bottles_fact(false).end();
+        i.take().bottles_fact(false).wall().end();
         println!();
+        thread::sleep(Duration::from_millis(1));
     }
     std::io::stderr().write(b"It's me the main!\n").unwrap();
 
