@@ -11,15 +11,15 @@ use std::io::prelude::*;
 trait Lyrics {
     fn bottles(&self, bool: bool) -> Self;
     fn bottles_fact(&self, bool: bool) -> Self;
-    fn bottlesFile(&self, bool: bool, File: &mut File) -> Self;
-    fn takeFile(&self,File: &mut File) -> Self;
+    fn bottles_file(&self, bool: bool, File: &mut File) -> Self;
+    fn take_file(&self,File: &mut File) -> Self;
     fn take(&self) -> Self;
-    fn wallFile(&self,File:&mut File) -> Self;
+    fn wall_file(&self,File:&mut File) -> Self;
     fn wall(&self) -> Self;
-    fn midFile(&self,File:&mut File) -> Self;
+    fn mid_file(&self,File:&mut File) -> Self;
     fn mid(&self) -> Self;
     fn end(&self);
-    fn endFile(&self, File:&mut File);
+    fn end_file(&self, File:&mut File);
     // fn long_num(&self ,num:u32, File: File) -> String;
     fn long_num(&self, num:u32) -> String;
 }
@@ -101,7 +101,7 @@ impl Lyrics for u32 {
         println!(".");
     }
 
-    fn bottlesFile(&self, cap: bool, file:&mut File) -> Self {
+    fn bottles_file(&self, cap: bool, file:&mut File) -> Self {
         let first_letter = if cap {"N"} else {"n"}.to_string();
         match *self {
             0 => file.write_all((first_letter + "o more lines of text").as_bytes()),
@@ -111,7 +111,7 @@ impl Lyrics for u32 {
         *self
     }
 
-    fn takeFile(&self, file:&mut File) -> u32 {
+    fn take_file(&self, file:&mut File) -> u32 {
         match *self {
             // '_' means else
             _ => { file.write_all("Print it out, stand up and shout, ".as_bytes()); *self + 1 }
@@ -119,17 +119,17 @@ impl Lyrics for u32 {
         }
     }
 
-    fn wallFile(&self, file:&mut File) -> u32 {
+    fn wall_file(&self, file:&mut File) -> u32 {
         file.write_all(" on the screen".as_bytes());
         *self
     }
 
-    fn midFile(&self, file:&mut File) -> u32 {
+    fn mid_file(&self, file:&mut File) -> u32 {
         file.write_all(", ".as_bytes());
         *self
     }
 
-    fn endFile(&self, file:&mut File) {
+    fn end_file(&self, file:&mut File) {
        file.write_all(".\n".as_bytes()); 
     }
 
@@ -211,8 +211,8 @@ fn main() {
     // };
 
     // for i in 1..num {
-    //     i.bottlesFile(true,&mut file).wallFile(&mut file).midFile(&mut file).bottlesFile(false,&mut file).endFile(&mut file);
-    //     i.takeFile(&mut file).bottlesFile(false,&mut file).wallFile(&mut file).endFile(&mut file);
+    //     i.bottles_file(true,&mut file).wall_file(&mut file).mid_file(&mut file).bottles_file(false,&mut file).end_file(&mut file);
+    //     i.take_file(&mut file).bottles_file(false,&mut file).wall_file(&mut file).end_file(&mut file);
     //     file.write_all(b"\n");
     // }
 
@@ -236,8 +236,8 @@ fn main() {
 
     let handle = thread::spawn(move ||{
         for i in 1..num {
-            i.bottlesFile(true,&mut file).wallFile(&mut file).midFile(&mut file).bottlesFile(false,&mut file).endFile(&mut file);
-            i.takeFile(&mut file).bottlesFile(false,&mut file).wallFile(&mut file).endFile(&mut file);
+            i.bottles_file(true,&mut file).wall_file(&mut file).mid_file(&mut file).bottles_file(false,&mut file).end_file(&mut file);
+            i.take_file(&mut file).bottles_file(false,&mut file).wall_file(&mut file).end_file(&mut file);
             file.write_all(b"\n");
         }
         
