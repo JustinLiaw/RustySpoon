@@ -75,6 +75,7 @@ impl Lyrics for u32 {
     }
 
     //Bottles Factors that uses the long_num function
+    //for part G
     fn bottles_fact(&self, cap:bool) -> u32 {
         match *self {
             0 => print!("{}o more lines of text", if cap {"N"} else {"n"}),
@@ -157,20 +158,29 @@ fn main() {
         println!();
     }
 
-    //Part C: count up to 500 but increment by a random number
+//Part C: count up to 500 but increment by a random number
     //Use Rand::rng crate to generate a number between 1 and 10 
     //inclusive.
     let mut rng = rand::thread_rng();
     let r_num: usize = rng.gen_range(1..=10);
 
     //Change end to 500. Use step_by function to increment by r_num
-    for i in (1..500).step_by(r_num) {
-        i.bottles(true).wall().mid().bottles(false).end();
-        i.take().bottles(false).wall().end();
-        println!();
+    for mut i in (1..511).step_by(r_num) {
+        if i > 500  {
+            i = 499;
+            i.bottles(true).wall().mid().bottles(false).end();
+            i.take().bottles(false).wall().end();
+            println!();
+            break
+        }
+        else {
+            i.bottles(true).wall().mid().bottles(false).end();
+            i.take().bottles(false).wall().end();
+            println!();
+        }
     }
 
-    //Part D: Display a prompt like "How many lines? " and read an 
+//Part D: Display a prompt like "How many lines? " and read an 
     //integer from the terminal. Stop at that number
     //Uses io::stdin() to take in user input
     let mut _input = String::new();
@@ -184,7 +194,7 @@ fn main() {
         println!();
     }
 
-    //Part F: Wait 1 second between each
+//Part F: Wait 1 second between each
     let mut _input = String::new();
     println!("How many lines?");
     let _ = io::stdin().read_line(&mut _input);
@@ -200,7 +210,7 @@ fn main() {
         thread::sleep(one_sec);
     }
 
-    //Part G: Factors (explained in long_num())
+//Part G: Factors (explained in long_num())
     let mut _input = String::new();
     println!("How many lines?");
     let _ = io::stdin().read_line(&mut _input);
@@ -217,7 +227,7 @@ fn main() {
         thread::sleep(one_sec);
     }
 
-    // // Part H: Writing to file
+// Part H: Writing to file
     let mut _input = String::new();
     println!("How many lines?");
     let _ = io::stdin().read_line(&mut _input);
