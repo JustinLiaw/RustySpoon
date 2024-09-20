@@ -7,7 +7,7 @@ Direction for Compilation:
     git clone https://github.com/JustinLiaw/RustySpoon.git
 
 2. To execute the code
-    cd proj_phase1
+    cd RustySpoon/proj_phase1
     cargo run
 
 For Execution:

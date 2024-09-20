@@ -165,11 +165,11 @@ fn main() {
     let r_num: usize = rng.gen_range(1..=10);
 
     //Change end to 500. Use step_by function to increment by r_num
-    for mut i in (1..511).step_by(r_num) {
+    for i in (1..520).step_by(r_num) {
         if i > 500  {
-            i = 499;
-            i.bottles(true).wall().mid().bottles(false).end();
-            i.take().bottles(false).wall().end();
+            // i = 499;
+            499.bottles(true).wall().mid().bottles(false).end();
+            499.take().bottles(false).wall().end();
             println!();
             break
         }
@@ -188,7 +188,7 @@ fn main() {
     let _ = io::stdin().read_line(&mut _input);
     let num: u32 = _input.trim().parse().expect("Bad");
 
-    for i in 1..num {
+    for i in 1..num  {
         i.bottles(true).wall().mid().bottles(false).end();
         i.take().bottles(false).wall().end();
         println!();
