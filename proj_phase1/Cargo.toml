@@ -9,3 +9,4 @@ edition = "2021"
 rand = "0.8.5"
 # Used for prime factoring
 prime_factorization = "1.0.4"
+imp = "0.1.0"
