@@ -1,8 +1,14 @@
 //words.txt file from https://github.com/Xethron/Hangman/blob/master/words.txt
 
-//make a Guess class which has 2 fields
-    //guess a char
-    //bool true if hits; false if misses
+
+//Guess class which has 2 fields
+//Var1: guess a char
+//Var2: bool true if hits; false if misses
+struct Guess {
+    guess : char,
+    hit : bool
+}
+
 
 //Picks the secret words from a file
 //args: None
@@ -32,13 +38,17 @@ fn letter_in_word(){
 
 fn main() {
     println!("Welcome to Hangman!");
-    String secret = pick_word()
-    
+    // String secret = pick_word()
+    let mut secret = "DaveHasBigJuicyLips".to_string();
+    secret =  secret.to_lowercase();
     //make a vector of guessses
-
+    let mut guesses: Vec<Guess> = Vec::new();
+    let mut left : Vec<char> = secret.chars().collect();
     //main game loop
+    while left.len() != 0    {
+        
+    }
     //TODO: 
-    //While loop
     //Ask user for input
     //if(letter_in_word == true)
     //fill out guess list
