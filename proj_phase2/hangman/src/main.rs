@@ -6,9 +6,36 @@ use std::io;
 //Guess class which has 2 fields
 //Var1: guess a char
 //Var2: bool true if hits; false if misses
-struct Guess {
-    guess : char,
-    hit : bool
+struct Game {
+    cur_guess : char,
+    game_on : bool,
+    guessed_letters: Vec<char>,
+    stage: i32
+}
+
+impl Game {
+    pub fn new(cur_guess: char, game_on: bool, guessed_letters: Vec<char>, stage: i32) -> Self {
+        Self {
+            cur_guess,
+            game_on,
+            guessed_letters,
+            stage
+        }
+    }
+
+    pub fn stage(&self) -> (){
+        let stage = format!("stage{}.txt", self.stage);
+        let file = fs::read_to_string(stage).expect("File Read");
+        println!("{file}");
+    }
+
+    pub fn get_game_status(&self) -> bool{
+        return self.game_on;
+    }
+
+    pub fn end_game(&mut self) -> (){
+        self.game_on = false;
+    }
 }
 
 
@@ -45,40 +72,47 @@ fn build_text() {
 //TODO:
 // Takes in the secret; Takes in character
 // return bool True if inside 
-fn letter_in_word(input : , left : Vec<char>, Vec<Guess>guesses ){
-}
+// fn letter_in_word(input : , left : Vec<char>, Vec<Guess>guesses ){
+// }
 
 // https://www.reddit.com/r/rust/comments/17mseuc/how_would_i_read_a_single_char_at_a_time_from/?rdt=65387
-fn read_one_char()  -> char {
-        println!("Choose a letter to guess");
-        let mut input_handler = io::stdin();
-        let mut byte = [0_u8];
-        return input_handler.read_exact(&mut byte).unwrap();
+// fn read_one_char()  -> char {
+//         println!("Choose a letter to guess");
+//         let mut input_handler = io::stdin();
+//         let mut byte = [0_u8];
+//         return input_handler.read_exact(&mut byte).unwrap();
 
-    }
+//     }
 
-// let mut rng = rand::thread_rng();
-// //Dynamic Array of Words
-// let words = build_word_array();
-
-// println!("Welcome to Hangman!");
-// let secret: &str = pick_word(&words);
-// println!("{secret}");
 
 fn main() {
+    let mut rng = rand::thread_rng();
+    //Dynamic Array of Words
+    let words = build_word_array();
+
     println!("Welcome to Hangman!");
-    // String secret = pick_word()
-    let mut secret = "DaveHasBigJuicyLips".to_string();
-    secret =  secret.to_lowercase();
-    //make a vector of guessses
-    let mut guesses: Vec<Guess> = Vec::new();
-    let mut left : Vec<char> = secret.chars().collect();
-    //main game loop
-    while left.len() != 0    {
-        let input = read_one_char()
-        println!("{}", input);
-        letter_in_word(input,left,&guesses);
+    let secret: String = pick_word(&words).to_lowercase();
+    println!("{secret}");
+
+    let mut hangman = Game::new('-', true, Vec::<char>::new(), 0);
+
+    while hangman.get_game_status(){
+        hangman.stage();
+
+        hangman.end_game();
     }
+
+
+
+
+
+
+    //main game loop
+    // while left.len() != 0    {
+    //     let input = read_one_char()
+    //     println!("{}", input);
+    //     letter_in_word(input,left,&guesses);
+    // }
     //TODO: 
     //Ask user for input
     //if(letter_in_word == true)
