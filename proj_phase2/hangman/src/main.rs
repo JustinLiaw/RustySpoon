@@ -1,5 +1,7 @@
 //words.txt file from https://github.com/Xethron/Hangman/blob/master/words.txt
-
+use std::fs;
+extern crate rand;
+use rand::{thread_rng, Rng};
 use std::io;
 //Guess class which has 2 fields
 //Var1: guess a char
@@ -10,10 +12,21 @@ struct Guess {
 }
 
 
-//Picks the secret words from a file
-//args: None
-fn pick_word(){
+fn pick_word(words: &[String]) -> &str{
+    let index = thread_rng().gen_range(0..=words.len());
+    return &words[index];
+}
 
+fn build_word_array() -> Vec<String>{
+    let file = fs::read_to_string("words.txt")
+    .expect("File Read");
+    let mut words = Vec::new();
+
+    for line in file.lines() {
+        words.push(line.to_string());
+    }
+
+    return words;
 }
 
 //Print out the hangman based on the number of guesses
@@ -43,6 +56,14 @@ fn read_one_char()  -> char {
         return input_handler.read_exact(&mut byte).unwrap();
 
     }
+
+// let mut rng = rand::thread_rng();
+// //Dynamic Array of Words
+// let words = build_word_array();
+
+// println!("Welcome to Hangman!");
+// let secret: &str = pick_word(&words);
+// println!("{secret}");
 
 fn main() {
     println!("Welcome to Hangman!");
