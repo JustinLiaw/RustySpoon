@@ -3,22 +3,21 @@ use std::fs;
 extern crate rand;
 extern crate console;
 use rand::{thread_rng, Rng};
-use std::io;
 use console::Term;
-//Guess class which has 2 fields
-//Var1: guess a char
-//Var2: bool true if hits; false if misses
+
 struct Game {
     secret: String,
+    discovered_word: Vec<char>,
     game_on : bool,
     guessed_letters: Vec<char>,
     stage: i32
 }
 
 impl Game {
-    pub fn new(secret: String, game_on: bool, guessed_letters: Vec<char>, stage: i32) -> Self {
+    pub fn new(secret: String, discovered_word: Vec<char>, game_on: bool, guessed_letters: Vec<char>, stage: i32) -> Self {
         Self {
             secret,
+            discovered_word,
             game_on,
             guessed_letters,
             stage
@@ -47,15 +46,34 @@ impl Game {
         println!("{:?}", self.guessed_letters);
     }
 
-    pub fn print_discovered_word(&self) -> (){
-        let mut word = Vec::<char>::new();
+    pub fn print_discovered_word(&mut self) -> (){
         for i in 0..self.secret.len() {
-            if self.guessed_letters.contains(&(self.secret.as_bytes()[i] as char)) {
-                word.push(self.secret.as_bytes()[i] as char);
+            if self.guessed_letters.contains(&(self.secret.as_bytes()[i] as char)) && !self.discovered_word.contains(&(self.secret.as_bytes()[i] as char)) {
+                self.discovered_word.push(self.secret.as_bytes()[i] as char);
             } 
 
         }
-        println!("{:#?}", word);
+        println!("{:#?}", self.discovered_word);
+    }
+
+    pub fn get_stage(&self) -> i32 {
+        return self.stage;
+    }
+
+    pub fn check_hit(&mut self, guess: char) -> () {
+        if self.secret.contains(&guess.to_string()) {
+            println!("The secret word contains: {}", &guess.to_string());
+        }else{
+            self.stage += 1;
+        }
+    }
+
+    pub fn won(&self) -> bool {
+        if self.secret.len() == self.discovered_word.len(){
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 
@@ -77,17 +95,8 @@ fn build_word_array() -> Vec<String>{
     return words;
 }
 
-// https://www.reddit.com/r/rust/comments/17mseuc/how_would_i_read_a_single_char_at_a_time_from/?rdt=65387
-// fn read_one_char()  -> char {
-//         println!("Choose a letter to guess");
-//         let mut input_handler = io::stdin();
-//         let mut byte = [0_u8];
-//         return input_handler.read_exact(&mut byte).unwrap();
-//     }
-
-
 fn main() {
-    let mut rng = rand::thread_rng();
+    let _rng = rand::thread_rng();
     //Dynamic Array of Words
     let words = build_word_array();
 
@@ -95,7 +104,7 @@ fn main() {
     let secret: String = pick_word(&words).to_lowercase();
     //println!("{secret}");
 
-    let mut hangman = Game::new(secret,true, Vec::<char>::new(), 0);
+    let mut hangman = Game::new(secret.clone(), Vec::<char>::new(), true, Vec::<char>::new(), 0);
     let term = Term::stdout();
 
     while hangman.get_game_status(){
@@ -112,8 +121,22 @@ fn main() {
         
         hangman.add_to_guesses(guess);
 
+        hangman.check_hit(guess);
 
+        if hangman.get_stage() == 7 {
+            println!("You died!\nThe secret word was {secret}");
+            hangman.end_game();
+        }else if hangman.won() {
+            println!("Congrats, you won!");
+            hangman.end_game();
+        }
+    }  
 
-        // hangman.end_game();
-    }     
+    println!("Would you like to play again? (y/n)");
+    let again: char = term.read_char().expect("Unable to Read");
+    if again == 'y' {
+        main();
+    }else{
+        println!("Thanks for playing!");
+    }
 }
