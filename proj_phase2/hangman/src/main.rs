@@ -25,7 +25,7 @@ impl Game {
     }
 
     pub fn stage(&self) -> (){
-        let stage = format!("stage{}.txt", self.stage);
+        let stage = format!("hangman/src/stage{}.txt", self.stage);
         let file = fs::read_to_string(stage).expect("File Read");
         println!("{file}\n");
     }
@@ -84,8 +84,7 @@ fn pick_word(words: &[String]) -> &str{
 }
 
 fn build_word_array() -> Vec<String>{
-    let file = fs::read_to_string("words.txt")
-    .expect("File Read");
+    let file = fs::read_to_string("hangman/src/words.txt").expect("File Read");
     let mut words = Vec::new();
 
     for line in file.lines() {
