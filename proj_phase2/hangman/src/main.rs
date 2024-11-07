@@ -1,5 +1,5 @@
 //words.txt file from https://github.com/Xethron/Hangman/blob/master/words.txt
-use std::fs;
+use std::*;
 extern crate rand;
 extern crate console;
 use rand::{thread_rng, Rng};
