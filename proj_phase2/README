@@ -1,0 +1,5 @@
+1. git clone https://github.com/JustinLiaw/RustySpoon.git
+
+2. cd proj_phase2
+
+3. cargo run

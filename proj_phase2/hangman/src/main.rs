@@ -6,10 +6,10 @@ use rand::{thread_rng, Rng};
 use console::Term;
 
 
-//Stuct that conatins the fields of the Game implemntation
+//Struct that contains the fields of the Game implementation
 //secret is the desired words
 //discovered_word contains the correct guesses of the word and has '_' for placeholders
-//game_on determins if there the game is ready to stop or not
+//game_on determines if there the game is ready to stop or not
 //guessed_letters contains all the guesses the user has made
 //stage contains which file number stage to print next 
 
